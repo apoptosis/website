@@ -1,0 +1,55 @@
+$marker-width: 20px;
+$marker-height: 16px;
+$marker-position: 18px;
+
+.header {
+    font-family: "Fira Mono";
+    font-weight: 700;
+    letter-spacing: 1.6px;
+    font-variant: small-caps;
+    font-size: 1.4em;
+
+    & > div {
+        height: 64px;
+
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+
+        & > .headerItem:not(:nth-child(2)) {
+            margin-left: 1em;
+        }
+
+        & > .headerItem {
+            display: flex;
+            flex-direction: row;
+            align-items: stretch;
+            line-height: 1.1em;
+            position: relative;
+
+            & > div:first-child {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+
+                a {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                }
+            }
+
+            .marker {
+                border-left: $marker-width solid transparent;
+                border-right: $marker-width solid transparent;
+                border-bottom: $marker-height solid black;
+
+                display: block;
+                position: absolute;
+                bottom: 0;
+                height: 0;
+                left: calc(50% - #{$marker-width});
+            }
+        }
+    }
+}

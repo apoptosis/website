@@ -1,0 +1,24 @@
+import { Box, Flex } from "@chakra-ui/react";
+import React from "react";
+import { Post } from "../../src/components/posts/Post";
+import { PageTitle } from "../../src/components/PageTitle";
+import { ProjectItem } from "../../src/components/ProjectItem";
+import { useAssets } from "@flapper/gatsby-source-flapper/src/ui";
+
+export const ActiveProjects = ({ ids }) => {
+  const posts = useAssets(ids);
+  return <>{posts && posts.map((post) => <PostItem post={post} />)}</>;
+};
+
+<Flex
+  margin="auto"
+  mb="6em"
+  maxW="760px"
+  flexDir="column"
+  alignItems="center"
+  justifyContent="center"
+></Flex>
+<PageTitle fontSize="2em">Latest Articles:</PageTitle>
+<Box>
+  <ActiveProjects ids={props.context.index.post} />
+</Box>

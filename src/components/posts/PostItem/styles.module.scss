@@ -1,0 +1,34 @@
+.post {
+    display: flex;
+    flex-direction: column;
+    padding: 0em 1em;
+    margin-bottom: 2em;
+
+    .titleRow {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        cursor: pointer;
+
+        .titleBorder {
+            height: 2.3em;
+            margin-right: 0.2em;
+            border-left: 3px solid gray;
+        }
+
+        a {
+            font-size: 3em;
+            font-weight: bold;
+        }
+    }
+
+    .summary {
+        padding-left: 1em;
+        font-size: 1.3em;
+        font-family: "Fira Mono";
+    }
+
+    .tags {
+        flex-direction: row-reverse;
+    }
+}

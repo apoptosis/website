@@ -1,0 +1,22 @@
+.sectionTitle {
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+
+    color: white;
+    background-color: black;
+
+    font-size: 3em;
+    font-weight: 700;
+    text-transform: uppercase;
+
+    padding-right: 0.5em;
+    margin-bottom: 0.5em;
+
+    height: 1.5em;
+    line-height: 1.1em;
+
+    &:not(:nth-child(2)) {
+        margin-top: 1em;
+    }
+}

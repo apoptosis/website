@@ -1,0 +1,22 @@
+.projectItem {
+    flex-direction: column;
+    margin: 0em 1em;
+    margin-bottom: 1em;
+
+    .titleAndSummary {
+        flex-direction: column;
+
+        .summary {
+            font-size: 1.2em;
+        }
+    }
+
+    .iconMenu {
+        display: flex;
+        font-size: 3em;
+
+        & > * {
+            margin-left: 0.5em;
+        }
+    }
+}

@@ -1,0 +1,210 @@
+---
+summary: The new ldlework.com is live
+---
+
+This has been a long time coming.
+
+I have been working on the rewrite of ldlework.com for several months now. It has finally reached a point where I'm ready to start using it.
+
+I have always wanted a personal website where I could share all of my software and write about what I'm up to. I have tried a number of static site generators like [Jekyll](http://jekyllrb.com), [Hugo](http://gohugo.io), [Ghost](https://ghost.org) to [Gatsby](https://www.gatsbyjs.org), [NextJS](https://nextjs.org), [Docusaurus](https://docusaurus.io), and more.
+
+In the past, generators like Jekyll and Hugo and Ghost never worked for me. They lock you into a particular set of metaphors like pages and posts, with categories and tags. I wanted to be able to structure my content in arbitrary ways.
+
+More recent generators like Gatsby and NextJS have the advantage that they allow you to build whatever you want, and they utilize React. However, they also make you do all the work. In Gatsby's case, it has many plugins, but suffers from the requirement to shove all your data into [GraphQl](https://graphql.org/) just to get it out again.
+
+# The Old ldlework.com and Blot
+
+To build the old ldlework.com, I needed something that would let me create the data metaphors I wanted (like projects, article series, etc) but not have it be too complicated.
+
+So I built my own SSG in Python called Blot. It used [Jinja2](http://jinja.pocoo.org/) for templating. The idea behind Blot was a simple API for pulling in your data, making simple transformations to it, then associating it with templates for rendering.
+
+I really enjoyed building the site this way. The only downside was that it was not hooked up into the React ecosystem.
+
+# The New ldlework.com and Flapper
+
+One of my more serious attempts to rebuild ldlework.com on a React-friendly generator was with Gatsby. In the end I just found its dependency on GraphQL to be too much work.
+
+Then I realized that Gatsby has a mode that allows you to bypass its GraphQL layer. It puts the entire process on your shoulders, but you can still call out to Gatsby to do the heavy lifting.
+
+That's what [Flapper](http://flapper.ldlework.com) is. It's Blot's API re-envisioned ontop of Gatsby. You design your site by writing small pipelines that get your data, transform it, and then pass it to React components.
+
+The advantages of building Flapper ontop of Gatsby are numerous:
+
+- Access to the React ecosystem
+- Support for MDX (React Markdown)
+  - Can make custom components available in the markdown
+- Support for SASS/styled-components
+- Easier embedding of media
+- Easier to embed my own code for examples / demos
+
+# The Future
+
+There are still some things I haven't fully re-implemented from the old website like my movie and book lists. I think those could be improved this time around too.
+
+I also need to work on mobile styling. And the styling of expository content in general.
+
+Flapper is also a work in progress. Improving the documentation and expanding its set of data transformers is on my todo list.
+
+The entire Flapper "plan" for the site as it stands is below.
+
+```typescript
+const plan: Plan = {
+  pages: {
+    page: [
+      SourceFilesRecursively("content/pages/", [".mdx"]),
+      BindMdx("{{path}}"),
+      SetRelativePath("content/pages/"),
+    ],
+    employer: [
+      SourceFilesRecursively("content/resume/", [".mdx"]),
+      BindMdx("{{path}}"),
+      Sort((a, b) => b.end_year - a.end_year),
+    ],
+    resume: [DeriveUnifiedType("employer")],
+  },
+
+  project_content: {
+    project: [
+      SourceMatchedFiles(
+        "content/projects/{{category_name}}/{{name}}/index.mdx"
+      ),
+      BindMdx("{{path}}"),
+    ],
+    project_category: [
+      DeriveAggregateType("project", "category_name", "category"),
+      BindMdx("content/projects/{{name}}/index.mdx"),
+    ],
+  },
+
+  project_posts: {
+    project_post: [
+      SourceMatchedFiles(
+        "content/projects/{{category_name}}/{{project_name}}/posts/{{series_name}}/{{part_number}}.mdx"
+      ),
+      BindMdx("{{path}}"),
+      SetSpacedTitle("series_name"),
+      SetFields({
+        project: fk("project", "name", "project_name"),
+        category: fk("project_category", "name", "category_name"),
+      }),
+    ],
+    project: [
+      SetFields({ project_posts: o2m("project_post", "project_name", "name") }),
+    ],
+    project_series: [
+      DeriveMultiAggregateType(
+        "project_post",
+        "series",
+        ["series_name", "project_name"],
+        "{{series_name}}"
+      ),
+      SetFields({
+        project: agg_fk("project", "name", "project_name"),
+        category: agg_fk("project_category", "name", "category_name"),
+      }),
+      SetSpacedTitle("name"),
+    ],
+  },
+
+  article_content: {
+    article: [
+      SourceMatchedFiles(
+        "content/articles/{{category_name}}/{{series_name}}/{{part_number}}.mdx"
+      ),
+      BindMdx("{{path}}"),
+      SetSpacedTitle("series_name"),
+    ],
+    article_category: [
+      DeriveAggregateType("article", "category_name", "category"),
+    ],
+    article_series: [
+      DeriveAggregateType("article", "series_name", "series"),
+      SetFields({ category: agg_attr("category") }),
+      SetSpacedTitle("name"),
+    ],
+  },
+
+  join_post_content: {
+    post: [
+      DeriveJoinedType("article", "project_post"),
+      Sort((a, b) => a["ctimeMs"] - b["ctimeMs"]),
+    ],
+    post_category: [DeriveAggregateType("post", "category_name", "category")],
+  },
+
+  targetting_and_menus: {
+    page: [SetUrl("{{relativePath}}")],
+    resume: [SetUrl("/resume"), MakeMenu("resume", "main", "c.v.")],
+    project_index: [SetUrl("/projects/"), MakeMenu("projects", "main")],
+    project_category: [
+      SetUrl("/projects/{{name}}/"),
+      MakeMenu("{{name}}_projects", "projects", "{{name}}"),
+    ],
+    project: [
+      SetUrl("/projects/{{category.name}}/{{name}}/"),
+      MakeMenu("{{name}}", "{{category.name}}_projects"),
+    ],
+    project_post: [
+      SetUrl(
+        "/projects/{{category.name}}/{{project.name}}/posts/{{series.name}}/{{part_number}}"
+      ),
+      MakeMenu(
+        "{{project.name}}_{{series.name}}_{{part_number}}",
+        "{{project.name}}_{{series.name}}_series",
+        "pt. {{part_number}}"
+      ),
+      Sort((a, b) => a.stats.ctimeMs - b.stats.ctimeMs),
+    ],
+    project_series: [
+      SetUrl("/projects/{{category.name}}/{{project.name}}/posts/{{name}}/"),
+      MakeMenu(
+        "{{project.name}}_{{name}}_series",
+        "{{project.name}}_posts",
+        "{{name}}"
+      ),
+    ],
+    project_post_index: [
+      DeriveJoinedType("project"),
+      BindMdx("projects/{{name}}/posts/index.mdx"),
+      SetUrl("/projects/{{category.name}}/{{name}}/posts/"),
+      MakeMenu("{{name}}_posts", "{{name}}", "posts"),
+    ],
+    article: [
+      SetUrl("/articles/{{category.name}}/{{series.name}}/{{part_number}}"),
+      MakeMenu(
+        "{{series.name}}_{{part_number}}",
+        "{{series.name}}_series",
+        "pt. {{part_number}}"
+      ),
+    ],
+    article_series: [
+      SetUrl("/articles/{{category.name}}/{{name}}/"),
+      MakeMenu("{{name}}_series", "{{category.name}}_posts", "{{name}}"),
+    ],
+    post_index: [SetUrl("/posts/"), MakeMenu("posts", "main")],
+    post_category: [
+      SetUrl("/categories/{{name}}/"),
+      MakeMenu("{{name}}_posts", "posts", "{{name}}"),
+    ],
+  },
+
+  writing: {
+    page: [RenderTemplate("src/templates/MdxPage/index.tsx")],
+    resume: [RenderTemplate("src/templates/Resume/index.tsx")],
+    article_series: [RenderTemplate("src/templates/ArticleSeries/index.tsx")],
+    article: [RenderTemplate("src/templates/Article/index.tsx")],
+    project_index: [RenderTemplate("src/templates/ProjectIndex/index.tsx")],
+    project_category: [
+      RenderTemplate("src/templates/ProjectCategory/index.tsx"),
+    ],
+    project: [RenderTemplate("src/templates/Project/index.tsx")],
+    project_post_index: [
+      RenderTemplate("src/templates/ProjectPostIndex/index.tsx"),
+    ],
+    project_post: [RenderTemplate("src/templates/ProjectPost/index.tsx")],
+    project_series: [RenderTemplate("src/templates/ProjectSeries/index.tsx")],
+    post_category: [RenderTemplate("src/templates/PostCategory/index.tsx")],
+    post_index: [RenderTemplate("src/templates/PostIndex/index.tsx")],
+  },
+};
+```
