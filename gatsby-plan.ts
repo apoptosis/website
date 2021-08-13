@@ -44,7 +44,7 @@ const plan: Plan = {
         ],
         project_category: [
             DeriveAggregateType('project', 'category_name', 'category'),
-            BindMdx('/home/ldlework/src/ldlework-dot-com/content/projects/{{name}}/index.mdx'),
+            BindMdx(`${process.cwd()}/content/projects/{{name}}/index.mdx`),
             SortByName,
             // sort projects within each category by name
             async (ctx, type, assets) => {
