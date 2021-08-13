@@ -41,7 +41,7 @@ const style_plugins = [
     `@chakra-ui/gatsby-plugin`,
     {
         resolve: 'gatsby-plugin-sass',
-        options: {additionalData: `@import "${__dirname}/src/styles/styles";`},
+        options: {additionalData: `@import "{}/src/styles/styles";`},
     },
 ]
 
@@ -100,7 +100,7 @@ const mdx_plugins = [
                 pages: require.resolve("./src/layouts/MainLayout/index.tsx"),
                 default: require.resolve("./src/layouts/MainLayout/index.tsx"),
             },
-            gatsbyRemarkPlugins: [                
+            gatsbyRemarkPlugins: [
                 {resolve: `gatsby-remark-copy-linked-files`},
                 {
                     resolve: `gatsby-remark-autolink-headers`,
