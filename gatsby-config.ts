@@ -41,7 +41,7 @@ const style_plugins = [
     `@chakra-ui/gatsby-plugin`,
     {
         resolve: 'gatsby-plugin-sass',
-        options: {additionalData: `@import "{}/src/styles/styles";`},
+        options: {additionalData: `@import "~/src/styles/styles";`},
     },
 ]
 
