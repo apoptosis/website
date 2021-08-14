@@ -1814,10 +1814,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@flapper/gatsby-source-flapper@0.1.5":
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@flapper/gatsby-source-flapper/-/gatsby-source-flapper-0.1.5.tgz#8e1ab037fb8a65390ae9101ac528923b19ec1c8b"
-  integrity sha512-/2jn9V+klqk2y48d3ftgFw09Xp63Id+2S8nm01JUyF0tvMN5xCxGlYmBWV7xM+EDihAIaum4yRxJVPRP/yb20w==
+"@flapper/gatsby-source-flapper@0.1.6":
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/@flapper/gatsby-source-flapper/-/gatsby-source-flapper-0.1.6.tgz#037f7abe20ea27748051ebe5ba453847269e75c7"
+  integrity sha512-MCABvyDpsls12Xr2fr5suj8A3etqu4kM4pytt2Y8UAq4ZrDmdYeRgn26T5i6szWnTkW4uTSjkeTkkLEo2XqUAQ==
   dependencies:
     "@types/balanced-match" "^1.0.1"
     "@types/fs-extra" "^8.0.1"
@@ -1832,6 +1832,7 @@
     npm "^7.20.3"
     recursive-readdir "^2.2.2"
     rss "^1.2.2"
+    slash "^4.0.0"
     title-case "^3.0.3"
     uuid "^8.3.2"
 
@@ -15075,6 +15076,11 @@ slash@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-3.0.0.tgz#6539be870c165adbd5240220dbe361f1bc4d4634"
   integrity sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==
+
+slash@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/slash/-/slash-4.0.0.tgz#2422372176c4c6c5addb5e2ada885af984b396a7"
+  integrity sha512-3dOsAHXXUkQTpOYcoAxLIorMTp4gIQr5IW3iVb7A7lFIp0VHhnynm9izx6TssdrIcVIESAlVjtnO2K8bg+Coew==
 
 slice-ansi@^4.0.0:
   version "4.0.0"
