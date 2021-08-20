@@ -1814,10 +1814,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@flapper/gatsby-source-flapper@0.1.7":
-  version "0.1.7"
-  resolved "https://registry.yarnpkg.com/@flapper/gatsby-source-flapper/-/gatsby-source-flapper-0.1.7.tgz#0474658a5ed8e012df358ac3099bd0eacd3553fe"
-  integrity sha512-W0mjCsJcc9LkNlBxFiDodFSpLpwFfiSLuzdROGHv6gIBiB9GB2qp6ATQyl+zdZ9TiauG1P3dVPnH3wuJDQRtqQ==
+"@flapper/gatsby-source-flapper@0.1.8":
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/@flapper/gatsby-source-flapper/-/gatsby-source-flapper-0.1.8.tgz#f602dff58b21e7b004ab265517e6530deaa3ee2e"
+  integrity sha512-wexpQ7075NXgN1w1sqq7KKUXKEkfokcyij3PrZ33eswDmRNlgaM1XX0QB9J4aoiLK8C1yuwotprwj/ulfRY6bA==
   dependencies:
     "@types/balanced-match" "^1.0.1"
     "@types/fs-extra" "^8.0.1"
